@@ -100,9 +100,15 @@ secrets.json
 *.key
 
 # ---------------------------------------------
-# Proje dosyaları
+# Yerel notlar / planlama dosyaları (ASLA commit'leme)
 # ---------------------------------------------
-plan.md
+local-notes/
+
+# ---------------------------------------------
+# Markdown dosyaları (README.md hariç hepsi yoksayılır)
+# ---------------------------------------------
+*.md
+!README.md
 
 # ---------------------------------------------
 # İşletim sistemi dosyaları
