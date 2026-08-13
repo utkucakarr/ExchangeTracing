@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="NetArchTest.Rules" Version="1.3.2" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BuildingBlocks\ExchangeTracing.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Users\Domain\ExchangeTracing.Modules.Users.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Users\Application\ExchangeTracing.Modules.Users.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Users\Infrastructure\ExchangeTracing.Modules.Users.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Users\Presentation\ExchangeTracing.Modules.Users.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Assets\Domain\ExchangeTracing.Modules.Assets.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Assets\Application\ExchangeTracing.Modules.Assets.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Assets\Infrastructure\ExchangeTracing.Modules.Assets.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Assets\Presentation\ExchangeTracing.Modules.Assets.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transactions\Domain\ExchangeTracing.Modules.Transactions.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transactions\Application\ExchangeTracing.Modules.Transactions.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transactions\Infrastructure\ExchangeTracing.Modules.Transactions.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Transactions\Presentation\ExchangeTracing.Modules.Transactions.Presentation.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Portfolio\Domain\ExchangeTracing.Modules.Portfolio.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Portfolio\Application\ExchangeTracing.Modules.Portfolio.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Portfolio\Infrastructure\ExchangeTracing.Modules.Portfolio.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Portfolio\Presentation\ExchangeTracing.Modules.Portfolio.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>
