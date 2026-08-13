@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\ExchangeTracing.BuildingBlocks.csproj" />
     <ProjectReference Include="..\Modules\Users\Presentation\ExchangeTracing.Modules.Users.Presentation.csproj" />
     <ProjectReference Include="..\Modules\Users\Infrastructure\ExchangeTracing.Modules.Users.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Assets\Presentation\ExchangeTracing.Modules.Assets.Presentation.csproj" />
@@ -9,6 +10,13 @@
     <ProjectReference Include="..\Modules\Transactions\Infrastructure\ExchangeTracing.Modules.Transactions.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Portfolio\Presentation\ExchangeTracing.Modules.Portfolio.Presentation.csproj" />
     <ProjectReference Include="..\Modules\Portfolio\Infrastructure\ExchangeTracing.Modules.Portfolio.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.16.19" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,3 +1,5 @@
+using ExchangeTracing.Modules.Users.Application;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,12 @@ public static class UsersModuleExtensions
             options.UseNpgsql(
                 configuration.GetConnectionString("Postgres"),
                 npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", UsersDbContext.Schema)));
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        var applicationAssembly = typeof(UserDto).Assembly;
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
+        services.AddValidatorsFromAssembly(applicationAssembly);
 
         services.AddHealthChecks()
             .AddDbContextCheck<UsersDbContext>("users-db");
