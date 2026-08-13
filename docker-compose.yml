@@ -3,15 +3,15 @@ services:
     image: postgres:17-alpine
     container_name: exchangetracing-postgres
     environment:
-      POSTGRES_DB: exchangetracing
-      POSTGRES_USER: exchangetracing
-      POSTGRES_PASSWORD: exchangetracing
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U exchangetracing -d exchangetracing"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
