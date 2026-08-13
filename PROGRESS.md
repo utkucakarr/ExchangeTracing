@@ -44,13 +44,22 @@ export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetr
   - Kurallar: Domain diğer katmanlara / EF Core+Npgsql'e bağımlı değil; Application → Infrastructure/Presentation yok; Presentation → Infrastructure yok; modüller birbirine bağımlı değil.
   - Diş geçirdiği doğrulandı (geçici negatif test EF Core bağımlılığını yakaladı, sonra kaldırıldı). `dotnet test` → 5/5 yeşil; CI her push/PR'da çalıştırır.
 
+### Phase 2 — Users
+- [x] **Users modülü — ilk dikey dilim** (create + get; auth/şifre kapsam dışı).
+  - Domain: `User` entity (`Create` factory, private setter'lar).
+  - Application: `CreateUser`/`GetUser` (MediatR command/query + handler + validator), `UserDto`, `IUserRepository` (odaklı arayüz).
+  - BuildingBlocks: `ValidationBehavior` (MediatR pipeline, FluentValidation) + `ConflictException`.
+  - Infrastructure: `User` EF config (`users.Users`, Email unique), `UserRepository`, ilk migration `InitialUsers`.
+  - Presentation: `UsersController` (`POST /users`, `GET /users/{id}`).
+  - API: global exception handler (ValidationException→400, ConflictException→409, 500 detay sızdırmaz), **OpenAPI + Scalar** (dev-only: `/scalar/v1`, `/openapi/v1.json`). Swagger yok.
+  - Doğrulandı: migration uygulandı (`users.Users` tablosu), uçtan uca create→201 / get→200 / duplicate→409 / invalid→400 / OpenAPI→200 / Scalar→200; `dotnet test` → 5 mimari + 7 Users testi yeşil.
+
 ## ➡️ Sıradaki adım
 
-- [ ] İlk dikey dilim: **Users** modülü (entity → create/get use-case → controller → uçtan uca).
+- [ ] **Assets** modülü (Symbol/Exchange, create/list; ikinci dikey dilim).
 
 ## ⏭️ Sonraki adımlar (planlanan sıra)
 
-- [ ] Assets modülü
 - [ ] Transactions modülü (buy/sell + validation + history)
 - [ ] Portfolio hesaplama (average cost, realized/unrealized P&L)
 - [ ] Market prices (mock provider)

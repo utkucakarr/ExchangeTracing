@@ -52,12 +52,20 @@ cp src/API/appsettings.Development.json.example src/API/appsettings.Development.
 # 2. start PostgreSQL
 docker compose up -d
 
-# 3. run the API
+# 3. apply database migrations (needs the dotnet-ef tool: dotnet tool install --global dotnet-ef)
+export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetracing;Username=exchangetracing;Password=exchangetracing"
+dotnet ef database update \
+  --project src/Modules/Users/Infrastructure --startup-project src/Modules/Users/Infrastructure
+
+# 4. run the API
 dotnet run --project src/API
 ```
 
-Then open `http://localhost:5255/health` → `Healthy` (this also verifies the
-database connection).
+Then:
+
+- `http://localhost:5255/health` → `Healthy` (also verifies the DB connection)
+- `http://localhost:5255/scalar/v1` → API reference UI (Scalar, dev only)
+- `http://localhost:5255/openapi/v1.json` → OpenAPI document
 
 In CI/production the connection string comes from the
 `ConnectionStrings__Postgres` environment variable instead of the file.
