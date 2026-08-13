@@ -14,7 +14,11 @@ docker compose up -d
 dotnet run --project src/API
 ```
 
-CI/prod ortamında connection string `ConnectionStrings__Postgres` environment variable'ı ile verilir.
+CI/prod ortamında connection string `ConnectionStrings__Postgres` environment variable'ı ile verilir. EF Core design-time komutları (`dotnet ef ...`) da bu env var'ı bekler (yoksa factory net bir hata verir):
+
+```bash
+export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetracing;Username=exchangetracing;Password=..."
+```
 
 ## ✅ Yapıldı
 
