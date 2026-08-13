@@ -9,14 +9,14 @@ builder.Services.AddControllers();
 
 // Register each module through its own composition entry point.
 builder.Services
-    .AddUsersModule()
-    .AddAssetsModule()
-    .AddTransactionsModule()
+    .AddUsersModule(builder.Configuration)
+    .AddAssetsModule(builder.Configuration)
+    .AddTransactionsModule(builder.Configuration)
     .AddPortfolioModule();
 
 var app = builder.Build();
 
 app.MapControllers();
-app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapHealthChecks("/health");
 
 app.Run();

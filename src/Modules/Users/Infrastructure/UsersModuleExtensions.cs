@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeTracing.Modules.Users.Infrastructure;
@@ -8,9 +10,16 @@ namespace ExchangeTracing.Modules.Users.Infrastructure;
 /// </summary>
 public static class UsersModuleExtensions
 {
-    public static IServiceCollection AddUsersModule(this IServiceCollection services)
+    public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration)
     {
-        // Module services (DbContext, handlers, repositories) will be registered here.
+        services.AddDbContext<UsersDbContext>(options =>
+            options.UseNpgsql(
+                configuration.GetConnectionString("Postgres"),
+                npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", UsersDbContext.Schema)));
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<UsersDbContext>("users-db");
+
         return services;
     }
 }

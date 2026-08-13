@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeTracing.Modules.Assets.Infrastructure;
@@ -8,9 +10,16 @@ namespace ExchangeTracing.Modules.Assets.Infrastructure;
 /// </summary>
 public static class AssetsModuleExtensions
 {
-    public static IServiceCollection AddAssetsModule(this IServiceCollection services)
+    public static IServiceCollection AddAssetsModule(this IServiceCollection services, IConfiguration configuration)
     {
-        // Module services (DbContext, handlers, repositories) will be registered here.
+        services.AddDbContext<AssetsDbContext>(options =>
+            options.UseNpgsql(
+                configuration.GetConnectionString("Postgres"),
+                npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", AssetsDbContext.Schema)));
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<AssetsDbContext>("assets-db");
+
         return services;
     }
 }
