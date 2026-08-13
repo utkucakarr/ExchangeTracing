@@ -39,13 +39,17 @@ export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetr
   - Her modül kendi DB health check'ini kaydeder; `/health` = `MapHealthChecks`. Henüz entity/tablo/migration yok.
   - Doğrulandı: `docker compose up` (healthy), `dotnet build` (0 uyarı/hata), `curl /health` → `Healthy` (loglar üç DbContext için `SELECT 1` → gerçek DB bağlantısı), `dotnet test` (exit 0).
 
+- [x] **Mimari testler (NetArchTest)** — sınır/bağımlılık kuralları artık test seviyesinde kilitli.
+  - `tests/ArchitectureTests` (xUnit + NetArchTest.Rules), tüm modül+katman assembly'lerini tarar.
+  - Kurallar: Domain diğer katmanlara / EF Core+Npgsql'e bağımlı değil; Application → Infrastructure/Presentation yok; Presentation → Infrastructure yok; modüller birbirine bağımlı değil.
+  - Diş geçirdiği doğrulandı (geçici negatif test EF Core bağımlılığını yakaladı, sonra kaldırıldı). `dotnet test` → 5/5 yeşil; CI her push/PR'da çalıştırır.
+
 ## ➡️ Sıradaki adım
 
-- [ ] **Mimari testler (NetArchTest)** — sınır/bağımlılık kurallarını CI'da otomatik doğrula.
+- [ ] İlk dikey dilim: **Users** modülü (entity → create/get use-case → controller → uçtan uca).
 
 ## ⏭️ Sonraki adımlar (planlanan sıra)
 
-- [ ] İlk dikey dilim: **Users** modülü (entity → create/get use-case → controller → uçtan uca).
 - [ ] Assets modülü
 - [ ] Transactions modülü (buy/sell + validation + history)
 - [ ] Portfolio hesaplama (average cost, realized/unrealized P&L)
