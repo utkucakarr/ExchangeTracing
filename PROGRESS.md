@@ -13,13 +13,20 @@ Yapılan adımların günlüğü. Detay/plan için `docs/roadmap.md`, kalıcı k
   - `API/Program.cs`: modülleri kaydeder + `/health` endpoint.
   - Doğrulandı: `dotnet build` (0 uyarı/hata), `curl /health` → `{"status":"ok"}`, `dotnet test` (exit 0).
 
+- [x] **PostgreSQL + Docker Compose + EF Core** — veri katmanı altyapısı.
+  - `docker-compose.yml`: PostgreSQL 17-alpine, named volume, `pg_isready` healthcheck, port 5432.
+  - `appsettings.json` → `ConnectionStrings:Postgres` (lokal dev).
+  - Veri sahibi modüller (Users, Assets, Transactions) Infrastructure'da EF Core + Npgsql; her biri kendi PostgreSQL şemasında (`users`/`assets`/`transactions`) `DbContext` + design-time factory. Şema-başına `__EFMigrationsHistory`.
+  - **Portfolio'da DbContext yok** (türetilmiş/okuma-odaklı, tablo sahiplenmiyor).
+  - Her modül kendi DB health check'ini kaydeder; `/health` = `MapHealthChecks`. Henüz entity/tablo/migration yok.
+  - Doğrulandı: `docker compose up` (healthy), `dotnet build` (0 uyarı/hata), `curl /health` → `Healthy` (loglar üç DbContext için `SELECT 1` → gerçek DB bağlantısı), `dotnet test` (exit 0).
+
 ## ➡️ Sıradaki adım
 
-- [ ] **PostgreSQL + Docker Compose + EF Core** — `docker-compose.yml`, connection string, modül başına DbContext (tek DB).
+- [ ] **Mimari testler (NetArchTest)** — sınır/bağımlılık kurallarını CI'da otomatik doğrula.
 
 ## ⏭️ Sonraki adımlar (planlanan sıra)
 
-- [ ] Mimari testler (NetArchTest) — sınır kurallarını CI'da doğrula.
 - [ ] İlk dikey dilim: **Users** modülü (entity → create/get use-case → controller → uçtan uca).
 - [ ] Assets modülü
 - [ ] Transactions modülü (buy/sell + validation + history)

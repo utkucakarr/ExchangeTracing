@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeTracing.Modules.Transactions.Infrastructure;
@@ -8,9 +10,16 @@ namespace ExchangeTracing.Modules.Transactions.Infrastructure;
 /// </summary>
 public static class TransactionsModuleExtensions
 {
-    public static IServiceCollection AddTransactionsModule(this IServiceCollection services)
+    public static IServiceCollection AddTransactionsModule(this IServiceCollection services, IConfiguration configuration)
     {
-        // Module services (DbContext, handlers, repositories) will be registered here.
+        services.AddDbContext<TransactionsDbContext>(options =>
+            options.UseNpgsql(
+                configuration.GetConnectionString("Postgres"),
+                npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", TransactionsDbContext.Schema)));
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<TransactionsDbContext>("transactions-db");
+
         return services;
     }
 }
