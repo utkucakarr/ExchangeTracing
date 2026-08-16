@@ -54,13 +54,21 @@ export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetr
   - API: global exception handler (ValidationException→400, ConflictException→409, 500 detay sızdırmaz), **OpenAPI + Scalar** (dev-only: `/scalar/v1`, `/openapi/v1.json`). Swagger yok.
   - Doğrulandı: migration uygulandı (`users.Users` tablosu), uçtan uca create→201 / get→200 / duplicate→409 / invalid→400 / OpenAPI→200 / Scalar→200; `dotnet test` → 5 mimari + 7 Users testi yeşil.
 
+### Phase 3 — Assets
+- [x] **Assets modülü — ikinci dikey dilim** (create + get + list).
+  - Kapsam kararı: şimdilik yalnız **BIST + TRY**. `Exchange`/`Currency` modelde tutuluyor ama factory'de sabitleniyor (`BIST`/`TRY`), API girişinde istenmez; unique `(Exchange, Symbol)` korunuyor (ileride çoklu borsa için kapı açık).
+  - Domain: `Asset` entity (`Create` factory, symbol upper-case normalize).
+  - Application: `CreateAsset`/`GetAsset`/`ListAssets` (MediatR), `AssetDto`, `IAssetRepository`, `AssetAlreadyExistsException`.
+  - Infrastructure: `Asset` EF config (`assets.Assets`, `(Exchange, Symbol)` unique), `AssetRepository`, migration `InitialAssets`.
+  - Presentation: `AssetsController` (`POST /assets`, `GET /assets/{id}`, `GET /assets`).
+  - Paylaşılan altyapı (exception handler, ValidationBehavior, OpenAPI/Scalar) Users'tan yeniden kullanıldı.
+  - Doğrulandı: migration uygulandı (`assets.Assets` + unique index), uçtan uca create→201 / get→200 / list→200 / duplicate→409 / invalid→400; `dotnet test` → 5 mimari + 5 Assets + 7 Users testi yeşil.
+
 ## ➡️ Sıradaki adım
 
-- [ ] **Assets** modülü (Symbol/Exchange, create/list; ikinci dikey dilim).
+- [ ] **Transactions** modülü (buy/sell + validation + history; üçüncü dikey dilim).
 
 ## ⏭️ Sonraki adımlar (planlanan sıra)
-
-- [ ] Transactions modülü (buy/sell + validation + history)
 - [ ] Portfolio hesaplama (average cost, realized/unrealized P&L)
 - [ ] Market prices (mock provider)
 - [ ] Frontend (React) iskeleti

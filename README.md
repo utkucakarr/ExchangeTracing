@@ -4,8 +4,8 @@ A portfolio management system that tracks buy/sell transactions and derives
 portfolio performance (average cost, realized/unrealized P&L). Built as a
 single-developer **Modular Monolith** with **Clean Architecture**.
 
-> Early stage: the solution skeleton, PostgreSQL/EF Core infrastructure and
-> architecture tests are in place; business features are next.
+> Early stage: foundation (solution skeleton, PostgreSQL/EF Core, architecture
+> tests) plus the Users and Assets modules are in place; Transactions is next.
 > Progress: [`PROGRESS.md`](PROGRESS.md).
 
 ## Tech stack
@@ -53,9 +53,12 @@ cp src/API/appsettings.Development.json.example src/API/appsettings.Development.
 docker compose up -d
 
 # 3. apply database migrations (needs the dotnet-ef tool: dotnet tool install --global dotnet-ef)
+#    each data-owning module has its own DbContext, so update them one by one
 export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetracing;Username=exchangetracing;Password=exchangetracing"
 dotnet ef database update \
   --project src/Modules/Users/Infrastructure --startup-project src/Modules/Users/Infrastructure
+dotnet ef database update \
+  --project src/Modules/Assets/Infrastructure --startup-project src/Modules/Assets/Infrastructure
 
 # 4. run the API
 dotnet run --project src/API
