@@ -5,13 +5,15 @@ using ExchangeTracing.Modules.Portfolio.Infrastructure;
 using ExchangeTracing.Modules.Transactions.Infrastructure;
 using ExchangeTracing.Modules.Users.Infrastructure;
 using ExchangeTracing.Modules.Users.Presentation;
+using ExchangeTracing.Modules.Assets.Presentation;
 using MediatR;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
-    .AddApplicationPart(typeof(UsersController).Assembly);
+    .AddApplicationPart(typeof(UsersController).Assembly)
+    .AddApplicationPart(typeof(AssetsController).Assembly);
 
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();

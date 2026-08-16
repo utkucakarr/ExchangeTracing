@@ -1,3 +1,5 @@
+using ExchangeTracing.Modules.Assets.Application;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,12 @@ public static class AssetsModuleExtensions
             options.UseNpgsql(
                 configuration.GetConnectionString("Postgres"),
                 npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", AssetsDbContext.Schema)));
+
+        services.AddScoped<IAssetRepository, AssetRepository>();
+
+        var applicationAssembly = typeof(AssetDto).Assembly;
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
+        services.AddValidatorsFromAssembly(applicationAssembly);
 
         services.AddHealthChecks()
             .AddDbContextCheck<AssetsDbContext>("assets-db");
