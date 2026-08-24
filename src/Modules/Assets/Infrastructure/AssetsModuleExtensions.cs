@@ -21,6 +21,9 @@ public static class AssetsModuleExtensions
 
         services.AddScoped<IAssetRepository, AssetRepository>();
 
+        // Cross-module contract: lets other modules check asset existence without referencing this module.
+        services.AddScoped<ExchangeTracing.BuildingBlocks.Contracts.IAssetExistence, AssetExistence>();
+
         var applicationAssembly = typeof(AssetDto).Assembly;
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
         services.AddValidatorsFromAssembly(applicationAssembly);

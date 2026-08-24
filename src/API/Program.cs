@@ -6,14 +6,19 @@ using ExchangeTracing.Modules.Transactions.Infrastructure;
 using ExchangeTracing.Modules.Users.Infrastructure;
 using ExchangeTracing.Modules.Users.Presentation;
 using ExchangeTracing.Modules.Assets.Presentation;
+using ExchangeTracing.Modules.Transactions.Presentation;
 using MediatR;
 using Scalar.AspNetCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(UsersController).Assembly)
-    .AddApplicationPart(typeof(AssetsController).Assembly);
+    .AddApplicationPart(typeof(AssetsController).Assembly)
+    .AddApplicationPart(typeof(TransactionsController).Assembly)
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();

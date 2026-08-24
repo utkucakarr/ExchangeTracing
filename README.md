@@ -5,8 +5,8 @@ portfolio performance (average cost, realized/unrealized P&L). Built as a
 single-developer **Modular Monolith** with **Clean Architecture**.
 
 > Early stage: foundation (solution skeleton, PostgreSQL/EF Core, architecture
-> tests) plus the Users and Assets modules are in place; Transactions is next.
-> Progress: [`PROGRESS.md`](PROGRESS.md).
+> tests) plus the Users, Assets and Transactions modules are in place; Portfolio
+> is next. Progress: [`PROGRESS.md`](PROGRESS.md).
 
 ## Tech stack
 
@@ -59,6 +59,8 @@ dotnet ef database update \
   --project src/Modules/Users/Infrastructure --startup-project src/Modules/Users/Infrastructure
 dotnet ef database update \
   --project src/Modules/Assets/Infrastructure --startup-project src/Modules/Assets/Infrastructure
+dotnet ef database update \
+  --project src/Modules/Transactions/Infrastructure --startup-project src/Modules/Transactions/Infrastructure
 
 # 4. run the API
 dotnet run --project src/API

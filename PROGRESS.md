@@ -64,11 +64,21 @@ export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetr
   - Paylaşılan altyapı (exception handler, ValidationBehavior, OpenAPI/Scalar) Users'tan yeniden kullanıldı.
   - Doğrulandı: migration uygulandı (`assets.Assets` + unique index), uçtan uca create→201 / get→200 / list→200 / duplicate→409 / invalid→400; `dotnet test` → 5 mimari + 5 Assets + 7 Users testi yeşil.
 
+### Phase 4 — Transactions
+- [x] **Transactions modülü — üçüncü dikey dilim** (buy/sell + get + history). Source of truth.
+  - Kararlar: modüller-arası doğrulama **açık** (kontrat ile), aşırı satış **engelli**, `Type` **enum**.
+  - **Cross-module iletişim (ilk kez):** BuildingBlocks'ta `IUserExistence`/`IAssetExistence` sözleşmeleri; Users/Assets Infrastructure bunları implement ediyor; API bağlıyor. Transactions, Users/Assets projelerini **referanslamıyor** (senkron in-process kontrat = Dependency Inversion).
+  - Domain: `Transaction` entity (`decimal` Quantity/Price, `Create` factory `>0` kuralı) + `TransactionType` enum.
+  - Application: `CreateTransaction` (user var mı → asset var mı → SELL ise pozisyon yeterli mi), `GetTransaction`, `ListTransactions` (userId zorunlu — validator), `ITransactionRepository` (+ `GetNetQuantityAsync` = Σ BUY − Σ SELL, DB'de).
+  - Infrastructure: EF config (`transactions.Transactions`, precision 18,8, indeksler `(UserId,AssetId)` & `(UserId,ExecutedAt DESC)`), `TransactionRepository`, migration `InitialTransactions`.
+  - Presentation: `TransactionsController` (`POST /transactions`, `GET /transactions/{id}`, `GET /transactions?userId=`).
+  - API: `NotFoundException`→404 eşlemesi + JSON string enum converter (Buy/Sell).
+  - Doğrulandı: uçtan uca BUY→201 / geçersiz ref→404 / aşırı sell→409 / geçerli sell→201 / invalid→400 / list→200; userId'siz list→400; `dotnet test` → 5 mimari + 5 Assets + 7 Users + 10 Transactions yeşil.
+
 ## ➡️ Sıradaki adım
 
-- [ ] **Transactions** modülü (buy/sell + validation + history; üçüncü dikey dilim).
+- [ ] **Portfolio** hesaplama (average cost, realized/unrealized P&L) — dördüncü dikey dilim.
 
 ## ⏭️ Sonraki adımlar (planlanan sıra)
-- [ ] Portfolio hesaplama (average cost, realized/unrealized P&L)
 - [ ] Market prices (mock provider)
 - [ ] Frontend (React) iskeleti
