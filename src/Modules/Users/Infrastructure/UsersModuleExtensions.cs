@@ -21,6 +21,9 @@ public static class UsersModuleExtensions
 
         services.AddScoped<IUserRepository, UserRepository>();
 
+        // Cross-module contract: lets other modules check user existence without referencing this module.
+        services.AddScoped<ExchangeTracing.BuildingBlocks.Contracts.IUserExistence, UserExistence>();
+
         var applicationAssembly = typeof(UserDto).Assembly;
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
         services.AddValidatorsFromAssembly(applicationAssembly);

@@ -1,3 +1,5 @@
+using ExchangeTracing.Modules.Transactions.Application;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,12 @@ public static class TransactionsModuleExtensions
             options.UseNpgsql(
                 configuration.GetConnectionString("Postgres"),
                 npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", TransactionsDbContext.Schema)));
+
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+        var applicationAssembly = typeof(TransactionDto).Assembly;
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
+        services.AddValidatorsFromAssembly(applicationAssembly);
 
         services.AddHealthChecks()
             .AddDbContextCheck<TransactionsDbContext>("transactions-db");

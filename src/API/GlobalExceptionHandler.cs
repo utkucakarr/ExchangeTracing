@@ -27,6 +27,12 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
                     .Select(e => new { e.PropertyName, e.ErrorMessage });
                 break;
 
+            case NotFoundException notFound:
+                problem.Status = StatusCodes.Status404NotFound;
+                problem.Title = "Not found";
+                problem.Detail = notFound.Message;
+                break;
+
             case ConflictException conflict:
                 problem.Status = StatusCodes.Status409Conflict;
                 problem.Title = "Conflict";
