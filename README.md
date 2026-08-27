@@ -54,7 +54,8 @@ docker compose up -d
 
 # 3. apply database migrations (needs the dotnet-ef tool: dotnet tool install --global dotnet-ef)
 #    each data-owning module has its own DbContext, so update them one by one
-export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetracing;Username=exchangetracing;Password=exchangetracing"
+#    use the same credentials you put in .env (do not commit real values)
+export ConnectionStrings__Postgres="Host=localhost;Port=5432;Database=exchangetracing;Username=exchangetracing;Password=<your-postgres-password>"
 dotnet ef database update \
   --project src/Modules/Users/Infrastructure --startup-project src/Modules/Users/Infrastructure
 dotnet ef database update \
